@@ -1,0 +1,11 @@
+# Portal Violeta - Ayuda y Orientación
+Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro.
+
+## Información de Ayuda
+Contamos con recursos de orientación y apoyo directo.
+
+## Secciones Principales
+- [Inicio](https://portalvioleta.lavalleja.uy/)
+- [Quiénes Somos](https://portalvioleta.lavalleja.uy/quienes-somos)
+- [Repositorio de Recursos](https://portalvioleta.lavalleja.uy/repositorio)
+- [Blog de Noticias](https://portalvioleta.lavalleja.uy/blog)

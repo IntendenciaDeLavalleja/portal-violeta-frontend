@@ -1,0 +1,71 @@
+---
+import "@/styles/global.css";
+import { Navbar } from "@/components/islands/Navbar";
+import { Footer } from "@/components/islands/Footer";
+import { ToastProvider } from "@/components/islands/ToastProvider";
+import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
+---
+
+<html lang="es" class="dark scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Quiénes Somos | Punto Violeta Lavalleja</title>
+    <meta
+      name="description"
+      content="Conocé qué es el Punto Violeta Digital, su propósito, alcance y compromiso con la prevención y el acompañamiento frente a la violencia basada en género."
+    />
+    <meta name="theme-color" content="#2e1065" />
+  </head>
+  <body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
+    <ToastProvider client:idle />
+
+    <div class="fixed bottom-6 right-6 z-50">
+      <WhatsAppCTA
+        client:load
+        size="lg"
+        className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6"
+        label="Hablar por WhatsApp"
+      />
+    </div>
+
+    <div class="relative flex flex-col min-h-screen pb-20 md:pb-0">
+      <Navbar client:load />
+
+      <main class="flex-1 pt-28 pb-16 px-4">
+        <section class="container mx-auto max-w-5xl">
+          <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Quiénes Somos</h1>
+            <p class="text-lg text-base-content/70">Punto Violeta Digital</p>
+          </header>
+
+          <article class="bg-base-200/40 border border-primary/20 rounded-2xl p-6 md:p-10 space-y-6 leading-relaxed text-base-content/85">
+            <p>
+              El Punto Violeta Digital es un espacio virtual creado para ofrecer información, orientación y acompañamiento frente a situaciones de violencia basada en género. Su objetivo es brindar a la ciudadanía un lugar seguro donde encontrar recursos, apoyo y herramientas que permitan prevenir, identificar y actuar ante diferentes formas de violencia.
+            </p>
+
+            <p>
+              Este espacio funciona como una puerta de acceso a información clara y confiable sobre derechos, servicios de atención y canales de ayuda disponibles en el territorio. A través del Punto Violeta Digital, cualquier persona que esté atravesando una situación de violencia, o que sea testigo de ella, puede acceder a orientación y conocer los recursos institucionales que existen para brindar apoyo y protección.
+            </p>
+
+            <p>
+              El Punto Violeta Digital también busca promover la sensibilización social y la prevención. Mediante contenidos informativos, materiales educativos y campañas de concientización, se pretende fortalecer el compromiso de toda la comunidad en la construcción de entornos libres de violencia.
+            </p>
+
+            <p>
+              Esta iniciativa forma parte de una estrategia más amplia orientada a garantizar espacios seguros, facilitar el acceso a la información y promover una cultura basada en el respeto, la igualdad y el cuidado colectivo.
+            </p>
+
+            <p>
+              El Punto Violeta Digital es, en esencia, un punto de encuentro para la información, la prevención y el acompañamiento, donde cada persona puede encontrar orientación y dar el primer paso hacia una red de apoyo.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <Footer client:visible />
+    </div>
+  </body>
+</html>

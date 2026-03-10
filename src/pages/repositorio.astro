@@ -1,0 +1,45 @@
+---
+import "@/styles/global.css";
+import { Navbar } from "@/components/islands/Navbar";
+import { Footer } from "@/components/islands/Footer";
+import { ToastProvider } from "@/components/islands/ToastProvider";
+import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
+import { RepositorySection } from "@/components/islands/RepositorySection";
+---
+
+<html lang="es" class="dark scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Repositorio | Punto Violeta Lavalleja</title>
+    <meta
+      name="description"
+      content="Repositorio digital de lecturas y recursos informativos de Punto Violeta Lavalleja."
+    />
+    <meta name="theme-color" content="#2e1065" />
+  </head>
+  <body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
+    <ToastProvider client:idle />
+
+    <div class="fixed bottom-6 right-6 z-50">
+      <WhatsAppCTA
+        client:load
+        size="lg"
+        className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6"
+        label="Hablar por WhatsApp"
+      />
+    </div>
+
+    <div class="relative flex flex-col min-h-screen pb-20 md:pb-0">
+      <Navbar client:load />
+
+      <main class="flex-1 pt-24">
+        <RepositorySection client:load />
+      </main>
+
+      <Footer client:visible />
+    </div>
+  </body>
+</html>

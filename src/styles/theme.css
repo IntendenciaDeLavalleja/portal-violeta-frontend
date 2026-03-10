@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Violeta Futurista - Dark Mode Default for "Portal" feel */
+    --background: 265 40% 10%; /* Deep violet/black */
+    --foreground: 210 40% 98%;
+
+    --card: 265 40% 13%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 265 40% 13%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 270 80% 60%; /* Vibrant Violet */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 265 30% 20%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 265 30% 20%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 290 80% 60%; /* Magenta accent */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 265 30% 25%;
+    --input: 265 30% 25%;
+    --ring: 270 80% 60%;
+
+    --radius: 0.75rem;
+  }
+
+  .light {
+    /* Light mode alternative if needed, but user asked for "Portal del futuro" which implies dark usually, 
+       but let's provide a high contrast light version just in case or for accessibility toggles */
+    --background: 270 20% 98%;
+    --foreground: 265 40% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 265 40% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 265 40% 10%;
+
+    --primary: 270 90% 45%; /* Darker violet for text contrast */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 270 20% 90%;
+    --secondary-foreground: 265 40% 10%;
+
+    --muted: 270 20% 90%;
+    --muted-foreground: 265 40% 40%;
+
+    --accent: 290 80% 45%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 270 20% 85%;
+    --input: 270 20% 85%;
+    --ring: 270 90% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Smooth scrolling for the whole page */
+  html {
+    scroll-behavior: smooth;
+  }
+}
