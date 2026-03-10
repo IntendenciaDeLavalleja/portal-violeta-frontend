@@ -44,14 +44,14 @@ type BlogDetailResponse = {
   related: BlogPostSummary[];
 };
 
-const backendBaseUrl =
-  import.meta.env.BACKEND_API_URL ?? "http://127.0.0.1:5000";
+const apiBaseUrl =
+  import.meta.env.PUBLIC_API_URL || "http://localhost:5000/api";
 
 export async function getStaticPaths() {
-  const backendBaseUrl =
-    import.meta.env.BACKEND_API_URL ?? "http://127.0.0.1:5000";
+  const apiBaseUrl =
+    import.meta.env.PUBLIC_API_URL || "http://localhost:5000/api";
 
-  const firstPageResponse = await fetch(`${backendBaseUrl}/api/blog/posts?page=1&per_page=20`);
+  const firstPageResponse = await fetch(`${apiBaseUrl}/blog/posts?page=1&per_page=20`);
   if (!firstPageResponse.ok) {
     return [];
   }
@@ -65,7 +65,7 @@ export async function getStaticPaths() {
   const totalPages = firstPage.pagination?.total_pages ?? 1;
 
   for (let page = 2; page <= totalPages; page += 1) {
-    const response = await fetch(`${backendBaseUrl}/api/blog/posts?page=${page}&per_page=20`);
+    const response = await fetch(`${apiBaseUrl}/blog/posts?page=${page}&per_page=20`);
     if (!response.ok) {
       continue;
     }
@@ -78,7 +78,7 @@ export async function getStaticPaths() {
 }
 
 const slug = Astro.params.slug;
-const detailResponse = await fetch(`${backendBaseUrl}/api/blog/posts/${encodeURIComponent(slug ?? "")}`);
+const detailResponse = await fetch(`${apiBaseUrl}/blog/posts/${encodeURIComponent(slug ?? "")}`);
 
 if (!detailResponse.ok) {
   throw new Error(`No se pudo cargar el post con slug ${slug ?? ""}`);
