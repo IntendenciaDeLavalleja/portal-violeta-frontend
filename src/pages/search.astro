@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SearchPage from "../components/SearchPage";
+
+const query = Astro.url.searchParams.get('q') || '';
+---
+
+<Layout title={`Buscar Alojamientos | Camping Arequita`}>
+	<SearchPage client:load initialQuery={query} />
+</Layout>

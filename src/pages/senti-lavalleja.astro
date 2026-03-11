@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SentiLavallejaPage from "../components/SentiLavallejaPage";
+import { t } from "../i18n/translations";
+import headerImage from "../img/senti-lavalleja/Header.webp";
+
+const seoTitle = t('sl_seo_title', 'es');
+const seoDescription = t('sl_seo_desc', 'es');
+const seoKeywords = "senti lavalleja, cerro arequita, laguna de los cuervos, rio santa lucia, gruta arequita, camping arequita, turismo uruguay, naturaleza uruguay, experiencias lavalleja";
+const seoImage = typeof headerImage === 'string' ? headerImage : headerImage.src;
+---
+
+<Layout title={seoTitle} description={seoDescription} keywords={seoKeywords} image={seoImage}>
+	<SentiLavallejaPage client:load />
+</Layout>
+
+<style>
+	:global(html) {
+		scroll-behavior: smooth;
+	}
+</style>

@@ -1,12 +1,14 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  /**
-   * URL base del backend Flask incluyendo /api.
-   * Ejemplo: https://mapi.portalvioleta.lavalleja.uy/api
-   * Se pasa como build arg en Coolify/Docker: PUBLIC_API_URL
+  /** URL base del backend Flask incluyendo /api.
+   *  Ejemplo: https://api.campingarequita.uy/api
+   *  Debe pasarse como build arg en Coolify/Docker.
    */
   readonly PUBLIC_API_URL: string;
+
+  /** Alias legacy — usar PUBLIC_API_URL en proyectos nuevos. */
+  readonly PUBLIC_API_BASE_URL: string;
 }
 
 interface ImportMeta {

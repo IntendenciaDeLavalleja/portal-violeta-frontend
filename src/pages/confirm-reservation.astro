@@ -1,0 +1,85 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { CheckCircle, XCircle, Loader2, ArrowRight } from "lucide-react";
+
+// @ts-ignore
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:5000/api";
+---
+
+<Layout title="Confirmar Reserva | Camping Arequita">
+  <div class="min-h-[70vh] flex items-center justify-center px-4 pt-24 text-base-content">
+    <div id="confirmation-container" class="max-w-md w-full bg-base-100 rounded-3xl p-8 shadow-xl border border-base-200 text-center">
+      
+      <div id="status-loading" class="flex flex-col items-center gap-4">
+        <Loader2 class="w-16 h-16 text-primary animate-spin" />
+        <h1 class="text-2xl font-bold">Procesando confirmación...</h1>
+        <p class="text-base-content/60">Estamos validando tu token de reserva.</p>
+      </div>
+
+      <div id="status-success" class="hidden flex flex-col items-center gap-4">
+        <div class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-2">
+          <CheckCircle class="w-12 h-12" />
+        </div>
+        <h1 class="text-3xl font-bold">¡Confirmado!</h1>
+        <p class="text-base-content/70" id="success-message"></p>
+        <div class="bg-base-200/50 rounded-2xl p-4 w-full mt-4">
+          <p class="text-xs uppercase tracking-widest text-base-content/40 font-bold mb-1">Código de Reserva</p>
+          <p class="text-2xl font-mono font-black text-primary" id="success-code"></p>
+        </div>
+        <a href="/" class="btn btn-primary btn-block rounded-2xl mt-6">
+          Volver al Inicio
+          <ArrowRight class="w-5 h-5" />
+        </a>
+      </div>
+
+      <div id="status-error" class="hidden flex flex-col items-center gap-4">
+        <div class="w-20 h-20 rounded-full bg-error/10 flex items-center justify-center text-error mb-2">
+          <XCircle class="w-12 h-12" />
+        </div>
+        <h1 class="text-3xl font-bold">Ups...</h1>
+        <p class="text-base-content/70" id="error-message"></p>
+        <a href="/" class="btn btn-ghost btn-block rounded-2xl mt-6">
+          Volver al Inicio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ API_BASE }}>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    const loading = document.getElementById('status-loading');
+    const success = document.getElementById('status-success');
+    const error = document.getElementById('status-error');
+    
+    const successMsg = document.getElementById('success-message');
+    const successCode = document.getElementById('success-code');
+    const errorMsg = document.getElementById('error-message');
+
+    if (!token) {
+      if(loading) loading.classList.add('hidden');
+      if(error) error.classList.remove('hidden');
+      if(errorMsg) errorMsg.innerText = "Token de confirmación no encontrado.";
+    } else {
+      fetch(`${API_BASE}/public/pre-reservations/confirm?token=${token}`)
+        .then(async res => {
+          const data = await res.json();
+          if(loading) loading.classList.add('hidden');
+          if (res.ok) {
+            if(success) success.classList.remove('hidden');
+            if(successMsg) successMsg.innerText = data.message || "Tu pre-reserva ha sido confirmada exitosamente.";
+            if(successCode) successCode.innerText = data.code || "---";
+          } else {
+            if(error) error.classList.remove('hidden');
+            if(errorMsg) errorMsg.innerText = data.error || "Ocurrió un error al confirmar la reserva.";
+          }
+        })
+        .catch(err => {
+          if(loading) loading.classList.add('hidden');
+          if(error) error.classList.remove('hidden');
+          if(errorMsg) errorMsg.innerText = "No se pudo conectar con el servidor.";
+        });
+    }
+  </script>
+</Layout>

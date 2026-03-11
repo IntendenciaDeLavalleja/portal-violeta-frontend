@@ -1,0 +1,90 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Toaster } from 'react-hot-toast';
+import SEO from './seo/SEO.astro';
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	keywords?: string;
+	image?: string;
+}
+
+const { 
+	title = "Camping Arequita | Lavalleja, Uruguay",
+	description,
+	keywords,
+	image
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" data-theme="emerald">
+	<head>
+		<SEO title={title} description={description} keywords={keywords} image={image} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+		<ClientRouter />
+	</head>
+	<body class="min-h-screen flex flex-col bg-base-100 font-sans antialiased">
+		<Navbar client:load />
+		
+		<main class="grow">
+			<slot />
+		</main>
+
+		<Footer client:load />
+		
+		<Toaster client:load position="bottom-right" />
+	</body>
+</html>
+
+<style is:global>
+	body {
+		font-family: 'Inter', system-ui, sans-serif;
+	}
+	
+	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Inter', system-ui, sans-serif;
+	}
+
+	/* Smooth scrolling */
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: oklch(var(--p) / 0.3);
+		border-radius: 10px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: oklch(var(--p) / 0.5);
+	}
+
+	/* View Transition animations */
+	::view-transition-old(root) {
+		animation: fade-out 0.3s ease-in-out;
+	}
+	::view-transition-new(root) {
+		animation: fade-in 0.3s ease-in-out;
+	}
+	@keyframes fade-out {
+		from { opacity: 1; }
+		to { opacity: 0; }
+	}
+	@keyframes fade-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+</style>

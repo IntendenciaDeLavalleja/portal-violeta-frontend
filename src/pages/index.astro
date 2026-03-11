@@ -1,89 +1,16 @@
 ---
-import "@/styles/global.css";
-import { Navbar } from "@/components/islands/Navbar";
-import { HeroUrgente } from "@/components/islands/HeroUrgente";
-import { QuickActions } from "@/components/islands/QuickActions";
-import { InfoCards } from "@/components/islands/InfoCards";
-import { ResourcesLocator } from "@/components/islands/ResourcesLocator";
-import { ContactForm } from "@/components/islands/ContactForm";
-import { Footer } from "@/components/islands/Footer";
-import { ToastProvider } from "@/components/islands/ToastProvider";
-import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
-
-// Server-side logic if needed
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero";
+import FeaturedAccommodations from "../components/FeaturedAccommodations";
+import Services from "../components/Services";
+import Testimonials from "../components/Testimonials";
+import SuggestionForm from "../components/SuggestionForm";
 ---
 
-<html lang="es" class="dark scroll-smooth">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Punto Violeta | Ayuda y Orientación</title>
-		<link rel="canonical" href={Astro.url.href} />
-		<meta name="description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
-		<meta name="keywords" content="punto violeta, ayuda violencia de género, orientación, recursos sociales, apoyo, protección" />
-		<meta name="theme-color" content="#2e1065" />
-
-		<!-- Open Graph / Facebook / WhatsApp -->
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:site_name" content="Punto Violeta Lavalleja" />
-		<meta property="og:locale" content="es_UY" />
-		<meta property="og:title" content="Punto Violeta | Ayuda y Orientación" />
-		<meta property="og:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
-		<meta property="og:image" content={new URL("/Opengraph.webp", Astro.site).href} />
-		<meta property="og:image:secure_url" content={new URL("/Opengraph.webp", Astro.site).href} />
-		<meta property="og:image:type" content="image/webp" />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
-
-		<!-- Twitter Card -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:url" content={Astro.url.href} />
-		<meta name="twitter:title" content="Punto Violeta | Ayuda y Orientación" />
-		<meta name="twitter:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
-		<meta name="twitter:image" content={new URL("/Opengraph.webp", Astro.site).href} />
-		<meta name="twitter:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
-
-		<link 
-			rel="stylesheet" 
-			href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-			integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-			crossorigin="" 
-		/>
-	</head>
-	<body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
-		
-		{/* Toast Notifications */}
-		<ToastProvider client:idle />
-
-		{/* Fixed WhatsApp Button (Bottom Right) - Visible on all devices */}
-		<div class="fixed bottom-6 right-6 z-50">
-			<WhatsAppCTA 
-				client:load 
-				size="lg" 
-				className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6" 
-				label="Hablar por WhatsApp"
-			/>
-		</div>
-
-		{/* Main Layout */}
-		<div class="relative flex flex-col min-h-screen pb-20 md:pb-0">
-			
-			<Navbar client:load />
-
-			<main class="flex-1">
-				<HeroUrgente client:load />
-				<QuickActions client:visible />
-				<InfoCards client:visible />
-				<ResourcesLocator client:visible />
-				<ContactForm client:visible />
-			</main>
-
-			<Footer client:visible />
-		</div>
-
-	</body>
-</html>
+<Layout title="Camping Arequita | Naturaleza, Confort y Aventura en Lavalleja">
+	<Hero client:load />
+	<FeaturedAccommodations client:load />
+	<Services client:load />
+	<Testimonials client:load />
+	<SuggestionForm client:load />
+</Layout>
