@@ -14,11 +14,31 @@ import { RepositorySection } from "@/components/islands/RepositorySection";
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="generator" content={Astro.generator} />
     <title>Repositorio | Punto Violeta Lavalleja</title>
-    <meta
-      name="description"
-      content="Repositorio digital de lecturas y recursos informativos de Punto Violeta Lavalleja."
-    />
+    <link rel="canonical" href={Astro.url.href} />
+    <meta name="description" content="Repositorio digital de lecturas y recursos informativos de Punto Violeta Lavalleja." />
     <meta name="theme-color" content="#2e1065" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:site_name" content="Punto Violeta Lavalleja" />
+    <meta property="og:locale" content="es_UY" />
+    <meta property="og:title" content="Repositorio | Punto Violeta Lavalleja" />
+    <meta property="og:description" content="Repositorio digital de lecturas y recursos informativos de Punto Violeta Lavalleja." />
+    <meta property="og:image" content={new URL("/Opengraph.webp", Astro.site).href} />
+    <meta property="og:image:secure_url" content={new URL("/Opengraph.webp", Astro.site).href} />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={Astro.url.href} />
+    <meta name="twitter:title" content="Repositorio | Punto Violeta Lavalleja" />
+    <meta name="twitter:description" content="Repositorio digital de lecturas y recursos informativos de Punto Violeta Lavalleja." />
+    <meta name="twitter:image" content={new URL("/Opengraph.webp", Astro.site).href} />
+    <meta name="twitter:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
   </head>
   <body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
     <ToastProvider client:idle />

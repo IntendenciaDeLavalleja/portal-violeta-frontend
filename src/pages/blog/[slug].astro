@@ -115,6 +115,11 @@ const formatDate = (value: string | null) => {
 };
 
 const readableDate = formatDate(post.published_at ?? post.created_at);
+
+const ogImage = post.cover_image_url
+  ? post.cover_image_url
+  : new URL("/Opengraph.webp", Astro.site).href;
+const ogDescription = post.excerpt ?? "Artículo del blog Punto Violeta Lavalleja.";
 ---
 
 <html lang="es" class="dark scroll-smooth">

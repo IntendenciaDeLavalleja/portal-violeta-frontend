@@ -20,23 +20,32 @@ import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Punto Violeta | Ayuda y Orientación</title>
+		<link rel="canonical" href={Astro.url.href} />
 		<meta name="description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
 		<meta name="keywords" content="punto violeta, ayuda violencia de género, orientación, recursos sociales, apoyo, protección" />
 		<meta name="theme-color" content="#2e1065" />
 
-		<!-- Open Graph / Facebook -->
+		<!-- Open Graph / Facebook / WhatsApp -->
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://portal-violeta.uy/" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:site_name" content="Punto Violeta Lavalleja" />
+		<meta property="og:locale" content="es_UY" />
 		<meta property="og:title" content="Punto Violeta | Ayuda y Orientación" />
 		<meta property="og:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
-		<meta property="og:image" content="/Opengraph.webp" />
+		<meta property="og:image" content={new URL("/Opengraph.webp", Astro.site).href} />
+		<meta property="og:image:secure_url" content={new URL("/Opengraph.webp", Astro.site).href} />
+		<meta property="og:image:type" content="image/webp" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content="https://portal-violeta.uy/" />
-		<meta property="twitter:title" content="Punto Violeta | Ayuda y Orientación" />
-		<meta property="twitter:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
-		<meta property="twitter:image" content="/Opengraph.webp" />
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={Astro.url.href} />
+		<meta name="twitter:title" content="Punto Violeta | Ayuda y Orientación" />
+		<meta name="twitter:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
+		<meta name="twitter:image" content={new URL("/Opengraph.webp", Astro.site).href} />
+		<meta name="twitter:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
 
 		<link 
 			rel="stylesheet" 

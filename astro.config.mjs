@@ -7,7 +7,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://portal-violeta.uy",
+  site: "https://portalvioleta.lavalleja.uy",
   output: "static",
   vite: {
     plugins: [tailwindcss()],
