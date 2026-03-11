@@ -1,0 +1,230 @@
+---
+import "@/styles/global.css";
+import { Navbar } from "@/components/islands/Navbar";
+import { Footer } from "@/components/islands/Footer";
+import { ToastProvider } from "@/components/islands/ToastProvider";
+import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
+
+type BlogAuthorInfo = {
+  id: number;
+  name: string;
+  bio: string | null;
+  photo_url: string | null;
+  contact: string | null;
+  is_active: boolean;
+};
+
+type BlogPostDetail = {
+  id: number;
+  title: string;
+  slug: string;
+  category: string | null;
+  cover_image_url: string | null;
+  excerpt: string | null;
+  author: BlogAuthorInfo | null;
+  published_at: string | null;
+  created_at: string;
+  content_html: string;
+};
+
+type BlogPostSummary = {
+  id: number;
+  title: string;
+  slug: string;
+  category: string | null;
+  cover_image_url: string | null;
+  excerpt: string | null;
+  author: BlogAuthorInfo | null;
+  published_at: string | null;
+  created_at: string;
+};
+
+type BlogDetailResponse = {
+  item: BlogPostDetail;
+  related: BlogPostSummary[];
+};
+
+const apiBaseUrl =
+  import.meta.env.PUBLIC_API_URL || "http://localhost:5000/api";
+
+export async function getStaticPaths() {
+  const apiBaseUrl =
+    import.meta.env.PUBLIC_API_URL || "http://localhost:5000/api";
+
+  const firstPageResponse = await fetch(`${apiBaseUrl}/blog/posts?page=1&per_page=20`);
+  if (!firstPageResponse.ok) {
+    return [];
+  }
+
+  const firstPage = await firstPageResponse.json() as {
+    items: BlogPostSummary[];
+    pagination: { total_pages: number };
+  };
+
+  const slugs = firstPage.items.map((post) => post.slug);
+  const totalPages = firstPage.pagination?.total_pages ?? 1;
+
+  for (let page = 2; page <= totalPages; page += 1) {
+    const response = await fetch(`${apiBaseUrl}/blog/posts?page=${page}&per_page=20`);
+    if (!response.ok) {
+      continue;
+    }
+
+    const payload = await response.json() as { items: BlogPostSummary[] };
+    slugs.push(...payload.items.map((post) => post.slug));
+  }
+
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const slug = Astro.params.slug;
+const detailResponse = await fetch(`${apiBaseUrl}/blog/posts/${encodeURIComponent(slug ?? "")}`);
+
+if (!detailResponse.ok) {
+  throw new Error(`No se pudo cargar el post con slug ${slug ?? ""}`);
+}
+
+const detailPayload = await detailResponse.json() as BlogDetailResponse;
+const post = detailPayload.item;
+const related = detailPayload.related ?? [];
+const authorContact = post.author?.contact?.trim() ?? "";
+const authorContactHref =
+  authorContact.includes("@")
+    ? `mailto:${authorContact}`
+    : authorContact.startsWith("http://") || authorContact.startsWith("https://")
+      ? authorContact
+      : /^\+?[\d\s()-]{6,}$/.test(authorContact)
+        ? `tel:${authorContact.replace(/\s+/g, "")}`
+        : "";
+
+const formatDate = (value: string | null) => {
+  if (!value) {
+    return "Sin fecha";
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return "Sin fecha";
+  }
+
+  return new Intl.DateTimeFormat("es-UY", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(parsed);
+};
+
+const readableDate = formatDate(post.published_at ?? post.created_at);
+
+const ogImage = post.cover_image_url
+  ? post.cover_image_url
+  : new URL("/Opengraph.webp", Astro.site).href;
+const ogDescription = post.excerpt ?? "Artículo del blog Punto Violeta Lavalleja.";
+---
+
+<html lang="es" class="dark scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{post.title} | Blog Punto Violeta</title>
+    <meta name="description" content={post.excerpt ?? "Artículo del blog Punto Violeta Lavalleja."} />
+    <meta name="theme-color" content="#2e1065" />
+  </head>
+  <body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
+    <ToastProvider client:idle />
+
+    <div class="fixed bottom-6 right-6 z-50">
+      <WhatsAppCTA
+        client:load
+        size="lg"
+        className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6"
+        label="Hablar por WhatsApp"
+      />
+    </div>
+
+    <div class="relative flex flex-col min-h-screen pb-20 md:pb-0">
+      <Navbar client:load />
+
+      <main class="flex-1 pt-28 pb-16 px-4">
+        <article class="container mx-auto max-w-4xl">
+          <a href="/blog" class="btn btn-ghost btn-sm mb-6">← Volver al blog</a>
+
+          <header class="mb-6">
+            <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/70 mb-4">
+              {post.category ? <span class="badge badge-outline border-primary/40 text-primary/90">{post.category}</span> : null}
+              <span>{readableDate}</span>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-5">{post.title}</h1>
+
+            {post.author?.name ? (
+              <div class="flex items-center gap-3">
+                {post.author.photo_url ? (
+                  <img
+                    src={post.author.photo_url}
+                    alt={post.author.name}
+                    class="w-11 h-11 rounded-full object-cover border border-primary/30"
+                  />
+                ) : (
+                  <div class="w-11 h-11 rounded-full border border-primary/30 bg-base-300" />
+                )}
+                <div>
+                  <p class="font-medium">{post.author.name}</p>
+                  {post.author.bio ? <p class="text-sm text-base-content/65 line-clamp-2">{post.author.bio}</p> : null}
+                  {authorContact && authorContactHref ? (
+                    <a
+                      href={authorContactHref}
+                      target={authorContactHref.startsWith("http") ? "_blank" : undefined}
+                      rel={authorContactHref.startsWith("http") ? "noreferrer" : undefined}
+                      class="text-sm text-primary/90 hover:text-primary"
+                    >
+                      {authorContact}
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+          </header>
+
+          {post.cover_image_url ? (
+            <figure class="mb-8 rounded-2xl overflow-hidden border border-primary/20">
+              <img src={post.cover_image_url} alt={post.title} class="w-full h-105 object-cover" />
+            </figure>
+          ) : null}
+
+          <section class="blog-rich-content max-w-none bg-base-200/40 border border-primary/20 rounded-2xl p-6 md:p-10">
+            <div set:html={post.content_html} />
+          </section>
+
+          {related.length > 0 ? (
+            <section class="mt-12">
+              <h2 class="text-2xl font-bold mb-5">También te puede interesar</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {related.map((relatedPost) => (
+                  <a
+                    href={`/blog/${relatedPost.slug}`}
+                    class="card bg-base-200/60 border border-primary/20 hover:border-primary/45 transition-colors"
+                  >
+                    {relatedPost.cover_image_url ? (
+                      <figure class="h-32">
+                        <img src={relatedPost.cover_image_url} alt={relatedPost.title} class="w-full h-full object-cover" />
+                      </figure>
+                    ) : null}
+                    <div class="card-body p-4">
+                      <h3 class="font-semibold leading-tight">{relatedPost.title}</h3>
+                      <p class="text-sm text-base-content/70">{formatDate(relatedPost.published_at ?? relatedPost.created_at)}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </article>
+      </main>
+
+      <Footer client:visible />
+    </div>
+  </body>
+</html>

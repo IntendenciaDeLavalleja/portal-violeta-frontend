@@ -7,12 +7,13 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://campingarequita.uy",
-  // Static output: Astro genera HTML/CSS/JS puro, sin servidor Node en runtime.
-  // El Dockerfile sirve el dist/ con nginx:alpine.
+  site: "https://portalvioleta.lavalleja.uy",
   output: "static",
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ["leaflet"],
+    },
   },
 
   integrations: [react(), sitemap()],

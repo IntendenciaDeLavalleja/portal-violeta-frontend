@@ -1,24 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
 
-# Reglas amigables para bots de IA / LLMs
-User-agent: GPTBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: anthropic-ai
-Allow: /
-User-agent: Claude-Web
-Allow: /
-User-agent: OmgiliBot
-Allow: /
-User-agent: Omgili
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-
-Sitemap: https://campingarequita.uy/sitemap-index.xml
+Sitemap: https://portalvioleta.lavalleja.uy/sitemap-index.xml
