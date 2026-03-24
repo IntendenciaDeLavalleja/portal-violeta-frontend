@@ -3,8 +3,8 @@ import "@/styles/global.css";
 import { Navbar } from "@/components/islands/Navbar";
 import { Footer } from "@/components/islands/Footer";
 import { ToastProvider } from "@/components/islands/ToastProvider";
-import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 import { BlogPostsSection } from "@/components/islands/BlogPostsSection";
+import { ViewTransitions } from "astro:transitions";
 ---
 
 <html lang="es" class="dark scroll-smooth">
@@ -12,19 +12,20 @@ import { BlogPostsSection } from "@/components/islands/BlogPostsSection";
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <ViewTransitions />
     <meta name="generator" content={Astro.generator} />
-    <title>Blog | Punto Violeta Lavalleja</title>
+    <title>Blog | Portal Violeta</title>
     <link rel="canonical" href={Astro.url.href} />
-    <meta name="description" content="Artículos, guías y novedades del Portal Punto Violeta Lavalleja." />
+    <meta name="description" content="Artículos, guías y novedades del Portal Violeta." />
     <meta name="theme-color" content="#2e1065" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
-    <meta property="og:site_name" content="Punto Violeta Lavalleja" />
+    <meta property="og:site_name" content="Portal Violeta" />
     <meta property="og:locale" content="es_UY" />
-    <meta property="og:title" content="Blog | Punto Violeta Lavalleja" />
-    <meta property="og:description" content="Artículos, guías y novedades del Portal Punto Violeta Lavalleja." />
+    <meta property="og:title" content="Blog | Portal Violeta" />
+    <meta property="og:description" content="Artículos, guías y novedades del Portal Violeta." />
     <meta property="og:image" content={new URL("/Opengraph.webp", Astro.site).href} />
     <meta property="og:image:secure_url" content={new URL("/Opengraph.webp", Astro.site).href} />
     <meta property="og:image:type" content="image/webp" />
@@ -35,22 +36,13 @@ import { BlogPostsSection } from "@/components/islands/BlogPostsSection";
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={Astro.url.href} />
-    <meta name="twitter:title" content="Blog | Punto Violeta Lavalleja" />
-    <meta name="twitter:description" content="Artículos, guías y novedades del Portal Punto Violeta Lavalleja." />
+    <meta name="twitter:title" content="Blog | Portal Violeta" />
+    <meta name="twitter:description" content="Artículos, guías y novedades del Portal Violeta." />
     <meta name="twitter:image" content={new URL("/Opengraph.webp", Astro.site).href} />
     <meta name="twitter:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
   </head>
   <body class="bg-background text-foreground min-h-screen font-sans antialiased selection:bg-primary selection:text-primary-foreground">
     <ToastProvider client:idle />
-
-    <div class="fixed bottom-6 right-6 z-50">
-      <WhatsAppCTA
-        client:load
-        size="lg"
-        className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6"
-        label="Hablar por WhatsApp"
-      />
-    </div>
 
     <div class="relative flex flex-col min-h-screen pb-20 md:pb-0">
       <Navbar client:load />

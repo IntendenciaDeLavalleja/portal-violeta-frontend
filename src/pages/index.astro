@@ -8,7 +8,7 @@ import { ResourcesLocator } from "@/components/islands/ResourcesLocator";
 import { ContactForm } from "@/components/islands/ContactForm";
 import { Footer } from "@/components/islands/Footer";
 import { ToastProvider } from "@/components/islands/ToastProvider";
-import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
+import { ViewTransitions } from "astro:transitions";
 
 // Server-side logic if needed
 ---
@@ -19,7 +19,8 @@ import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Punto Violeta | Ayuda y Orientación</title>
+		<ViewTransitions />
+		<title>Portal Violeta | Ayuda y Orientación</title>
 		<link rel="canonical" href={Astro.url.href} />
 		<meta name="description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
 		<meta name="keywords" content="punto violeta, ayuda violencia de género, orientación, recursos sociales, apoyo, protección" />
@@ -28,9 +29,9 @@ import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 		<!-- Open Graph / Facebook / WhatsApp -->
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:site_name" content="Punto Violeta Lavalleja" />
+		<meta property="og:site_name" content="Portal Violeta" />
 		<meta property="og:locale" content="es_UY" />
-		<meta property="og:title" content="Punto Violeta | Ayuda y Orientación" />
+		<meta property="og:title" content="Portal Violeta | Ayuda y Orientación" />
 		<meta property="og:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
 		<meta property="og:image" content={new URL("/Opengraph.webp", Astro.site).href} />
 		<meta property="og:image:secure_url" content={new URL("/Opengraph.webp", Astro.site).href} />
@@ -42,7 +43,7 @@ import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 		<!-- Twitter Card -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:url" content={Astro.url.href} />
-		<meta name="twitter:title" content="Punto Violeta | Ayuda y Orientación" />
+		<meta name="twitter:title" content="Portal Violeta | Ayuda y Orientación" />
 		<meta name="twitter:description" content="Espacio seguro de orientación y apoyo en situaciones de violencia. Ayuda inmediata, recursos y contacto seguro." />
 		<meta name="twitter:image" content={new URL("/Opengraph.webp", Astro.site).href} />
 		<meta name="twitter:image:alt" content="Portal Violeta Lavalleja — Espacio seguro de ayuda y orientación" />
@@ -58,16 +59,6 @@ import { WhatsAppCTA } from "@/components/islands/WhatsAppCTA";
 		
 		{/* Toast Notifications */}
 		<ToastProvider client:idle />
-
-		{/* Fixed WhatsApp Button (Bottom Right) - Visible on all devices */}
-		<div class="fixed bottom-6 right-6 z-50">
-			<WhatsAppCTA 
-				client:load 
-				size="lg" 
-				className="shadow-2xl shadow-primary/20 rounded-full h-14 px-6" 
-				label="Hablar por WhatsApp"
-			/>
-		</div>
 
 		{/* Main Layout */}
 		<div class="relative flex flex-col min-h-screen pb-20 md:pb-0">

@@ -1,13 +1,12 @@
 import React from "react";
 import { QuickExitButton } from "./QuickExitButton";
-import { WhatsAppCTA } from "./WhatsAppCTA";
 
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-secondary/30 border-t border-border/50 py-12 px-4 mt-10">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="text-center md:text-left space-y-2">
-          <h4 className="font-bold text-lg">Punto Violeta Lavalleja</h4>
+          <h4 className="font-bold text-lg">Portal Violeta</h4>
           <p className="text-sm text-muted-foreground max-w-xs">
             Un espacio de orientación y recursos para situaciones de violencia basada en género.
           </p>
@@ -19,7 +18,6 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <WhatsAppCTA size="sm" variant="outline" />
           <QuickExitButton />
         </div>
       </div>

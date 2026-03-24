@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <a href="/" className="text-2xl font-bold tracking-tighter text-primary">
-            Punto<span className="text-foreground">Violeta</span>Lavalleja
+            Portal<span className="text-foreground">Violeta</span>Lavalleja
           </a>
         </div>
 

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { AlertTriangle, Loader2, Send } from "lucide-react";
+import { AlertTriangle, Loader2, MessageCircle, Send } from "lucide-react";
 import { WhatsAppCTA } from "./WhatsAppCTA";
 import { apiClient } from "@/lib/api/client";
 import { queryClient } from "@/lib/queryClient";
@@ -31,6 +31,9 @@ const contactSchema = z.object({
   acknowledgedNoEmergency: z.boolean().refine((value) => value, {
     message: "Debes confirmar que esto no es una línea de emergencia",
   }),
+  acknowledgedDataPolicy: z.boolean().refine((value) => value, {
+    message: "Debes aceptar el tratamiento de datos personales para continuar",
+  }),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -52,6 +55,7 @@ const ContactFormInner: React.FC = () => {
       safeTime: "",
       message: "",
       acknowledgedNoEmergency: false,
+      acknowledgedDataPolicy: false,
     },
   });
 
@@ -116,6 +120,22 @@ const ContactFormInner: React.FC = () => {
 
   return (
     <section id="contact" className="py-16 px-4 container mx-auto max-w-xl">
+      <a
+        href="https://wa.me/59892626928"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mb-6 flex items-start gap-4 rounded-xl border border-green-500/40 bg-green-500/10 p-5 transition-colors hover:bg-green-500/15"
+        aria-label="Contacto por videollamada WhatsApp para mujeres sordas"
+      >
+        <MessageCircle className="mt-1 h-7 w-7 shrink-0 text-green-400" />
+        <div>
+          <p className="text-base font-bold text-green-400">Atención a mujeres sordas — Videollamada WhatsApp</p>
+          <p className="mt-1 text-sm text-base-content/70">
+            Si sos sorda o tenés discapacidad auditiva, podés llamar al{" "}
+            <span className="font-bold text-green-400">092 626 928</span>
+          </p>
+        </div>
+      </a>
       <div className="card backdrop-blur-md bg-base-200/80">
         <div className="card-body">
           <h2 className="card-title text-2xl">Escribinos</h2>
@@ -200,6 +220,25 @@ const ContactFormInner: React.FC = () => {
             {errors.acknowledgedNoEmergency && (
               <p className="text-sm text-error" role="alert">
                 {errors.acknowledgedNoEmergency.message}
+              </p>
+            )}
+
+            <div className="rounded-lg border border-primary/20 bg-base-300/40 p-3">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="data-policy-check"
+                  className="checkbox checkbox-primary mt-0.5 shrink-0"
+                  {...register("acknowledgedDataPolicy")}
+                />
+                <label htmlFor="data-policy-check" className="cursor-pointer text-xs leading-snug text-base-content/75">
+                  En cumplimiento de la Ley N° 18.331, se informa que los datos personales y sensibles recabados en este formulario serán tratados con el máximo nivel de reserva y seguridad. Estos datos se incorporarán a una base con la finalidad exclusiva de gestionar la denuncia, brindar protección y dar cumplimiento a los procedimientos previstos en la Ley N° 19.580.
+                </label>
+              </div>
+            </div>
+            {errors.acknowledgedDataPolicy && (
+              <p className="text-sm text-error" role="alert">
+                {errors.acknowledgedDataPolicy.message}
               </p>
             )}
 
