@@ -1,21 +1,70 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { QueryClientProvider, keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import { BookOpenText, Loader2, Search, ChevronLeft, ChevronRight, X, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, BookOpenText, CalendarDays, ChevronLeft, ChevronRight, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { apiClient } from "@/lib/api/client";
-import type { BlogPostsResponse } from "@/lib/api/types";
+import type { BlogPostDetailResponse, BlogPostsResponse } from "@/lib/api/types";
 import { queryClient } from "@/lib/queryClient";
 import { BlogPostCard } from "@/components/ui/BlogPostCard";
 
 const POSTS_PER_PAGE = 20;
 
+type BlogRoute =
+  | { mode: "list" }
+  | { mode: "detail"; slug: string };
+
+const formatDate = (date: string | null) => {
+  if (!date) {
+    return "Sin fecha";
+  }
+
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) {
+    return "Sin fecha";
+  }
+
+  return new Intl.DateTimeFormat("es-UY", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(parsed);
+};
+
+const getBlogRoute = (pathname: string): BlogRoute => {
+  const sanitizedPath = pathname.split("?")[0]?.replace(/\/+$/, "") || "/blog";
+  const segments = sanitizedPath.split("/").filter(Boolean);
+
+  if (segments[0] === "blog" && segments.length > 1) {
+    return {
+      mode: "detail",
+      slug: decodeURIComponent(segments.slice(1).join("/")),
+    };
+  }
+
+  return { mode: "list" };
+};
+
 export const BlogPostsSection: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BlogPostsSectionInner />
+      <BlogPostsRouter />
     </QueryClientProvider>
   );
+};
+
+const BlogPostsRouter: React.FC = () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const route = getBlogRoute(window.location.pathname);
+
+  if (route.mode === "detail") {
+    return <BlogPostDetailView slug={route.slug} />;
+  }
+
+  return <BlogPostsSectionInner />;
 };
 
 const BlogPostsSectionInner: React.FC = () => {
@@ -309,6 +358,144 @@ const BlogPostsSectionInner: React.FC = () => {
           </div>
         ) : null}
       </div>
+    </section>
+  );
+};
+
+type BlogPostDetailViewProps = {
+  slug: string;
+};
+
+const BlogPostDetailView: React.FC<BlogPostDetailViewProps> = ({ slug }) => {
+  const detailQuery = useQuery({
+    queryKey: ["blog-post", slug],
+    queryFn: async () => {
+      const response = await apiClient.get<BlogPostDetailResponse>(`/blog/posts/${encodeURIComponent(slug)}`);
+      return response.data;
+    },
+    retry: false,
+  });
+
+  const post = detailQuery.data?.item;
+  const related = detailQuery.data?.related ?? [];
+  const detailError = detailQuery.error as AxiosError<{ message?: string }> | null;
+  const isNotFound = detailError?.response?.status === 404;
+  const errorMessage = detailError?.response?.data?.message
+    ?? (isNotFound ? "No encontramos ese artículo." : detailQuery.error ? "No se pudo cargar el artículo." : null);
+
+  useEffect(() => {
+    if (!post?.title) {
+      return;
+    }
+
+    document.title = `${post.title} | Blog Portal Violeta`;
+  }, [post?.title]);
+
+  if (detailQuery.isLoading) {
+    return (
+      <section className="py-16 px-4 bg-base-200/25">
+        <div className="container mx-auto max-w-4xl flex flex-col items-center justify-center gap-3 py-20 text-base-content/60">
+          <Loader2 className="h-7 w-7 animate-spin" />
+          <p>Cargando artículo…</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!post || errorMessage) {
+    return (
+      <section className="py-16 px-4 bg-base-200/25">
+        <div className="container mx-auto max-w-3xl pt-8">
+          <a href="/blog" className="btn btn-ghost btn-sm mb-6">
+            <ArrowLeft className="h-4 w-4" />
+            Volver al blog
+          </a>
+          <div className={`alert ${isNotFound ? "alert-warning" : "alert-error"}`}>
+            <span>{errorMessage ?? "No se pudo cargar el artículo."}</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const authorContact = post.author?.contact?.trim() ?? "";
+  const authorContactHref = authorContact.includes("@")
+    ? `mailto:${authorContact}`
+    : authorContact.startsWith("http://") || authorContact.startsWith("https://")
+      ? authorContact
+      : /^\+?[\d\s()-]{6,}$/.test(authorContact)
+        ? `tel:${authorContact.replace(/\s+/g, "")}`
+        : "";
+
+  return (
+    <section className="py-16 px-4 bg-base-200/25">
+      <article className="container mx-auto max-w-4xl pt-8">
+        <a href="/blog" className="btn btn-ghost btn-sm mb-6">
+          <ArrowLeft className="h-4 w-4" />
+          Volver al blog
+        </a>
+
+        <header className="mb-6">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-base-content/70 mb-4">
+            {post.category ? <span className="badge badge-outline border-primary/40 text-primary/90">{post.category}</span> : null}
+            <span className="inline-flex items-center gap-1">
+              <CalendarDays className="h-4 w-4" />
+              {formatDate(post.published_at ?? post.created_at)}
+            </span>
+          </div>
+
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-5">{post.title}</h1>
+
+          {post.author?.name ? (
+            <div className="flex items-center gap-3">
+              {post.author.photo_url ? (
+                <img
+                  src={post.author.photo_url}
+                  alt={post.author.name}
+                  className="w-11 h-11 rounded-full object-cover border border-primary/30"
+                />
+              ) : (
+                <div className="w-11 h-11 rounded-full border border-primary/30 bg-base-300" />
+              )}
+              <div>
+                <p className="font-medium">{post.author.name}</p>
+                {post.author.bio ? <p className="text-sm text-base-content/65 line-clamp-2">{post.author.bio}</p> : null}
+                {authorContact && authorContactHref ? (
+                  <a
+                    href={authorContactHref}
+                    target={authorContactHref.startsWith("http") ? "_blank" : undefined}
+                    rel={authorContactHref.startsWith("http") ? "noreferrer" : undefined}
+                    className="text-sm text-primary/90 hover:text-primary"
+                  >
+                    {authorContact}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </header>
+
+        {post.cover_image_url ? (
+          <figure className="mb-8 rounded-2xl overflow-hidden border border-primary/20">
+            <img src={post.cover_image_url} alt={post.title} className="w-full h-105 object-cover" />
+          </figure>
+        ) : null}
+
+        <section className="blog-rich-content max-w-none bg-base-200/40 border border-primary/20 rounded-2xl p-6 md:p-10">
+          <div dangerouslySetInnerHTML={{ __html: post.content_html }} />
+        </section>
+
+        {related.length > 0 ? (
+          <section className="mt-12">
+            <h2 className="text-2xl font-bold mb-5">También te puede interesar</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {related.map((relatedPost) => (
+                <BlogPostCard key={relatedPost.id} post={relatedPost} />
+              ))}
+            </div>
+          </section>
+        ) : null}
+      </article>
     </section>
   );
 };

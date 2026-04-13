@@ -48,7 +48,7 @@ import { ViewTransitions } from "astro:transitions";
       <Navbar client:load />
 
       <main class="flex-1 pt-24">
-        <BlogPostsSection client:load />
+        <BlogPostsSection client:only="react" />
       </main>
 
       <Footer client:visible />
